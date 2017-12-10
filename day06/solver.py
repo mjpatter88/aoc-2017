@@ -1,7 +1,8 @@
 
 steps = 0
+loop_len = 0
 banks = []
-cache = []
+cache = {}
 
 def distribute_blocks(starting_index, num_blocks):
     index = starting_index
@@ -21,7 +22,7 @@ with open("input.txt") as input_file:
 
 repeat = False
 while not repeat:
-    cache.append(",".join(map(str, banks)))
+    cache[",".join(map(str, banks))] = steps
 
     blocks = max(banks)
     max_index = banks.index(blocks)
@@ -29,7 +30,11 @@ while not repeat:
     distribute_blocks(max_index+1, blocks)
 
     steps += 1
-    if ",".join(map(str, banks)) in cache:
+    cache_entry = ",".join(map(str, banks))
+    if cache_entry in cache:
         repeat = True
 
+loop_len = steps - cache[cache_entry]
+
 print(f'Part 1 answer: {steps}')
+print(f'Part 2 answer: {loop_len}')
