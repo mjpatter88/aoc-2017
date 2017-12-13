@@ -26,7 +26,9 @@ direction_getter = get_direction()
 number = 0
 answer = 0
 position = (0, 0)
+
 spiral = {}
+spiral_2 = {}
 indexes = {}
 
 with open("input.txt") as input_file:
@@ -43,3 +45,37 @@ location = indexes[number]
 print(location)
 
 print(f'Part 1 answer: {location[0] + location[1]}')
+
+def get_sum_adj_squares(pos, spiral):
+    left = (pos[0] - 1, pos[1])
+    bot_left = (pos[0] - 1, pos[1] - 1)
+    bot = (pos[0], pos[1] - 1)
+    bot_right = (pos[0] + 1, pos[1] - 1)
+    right = (pos[0] + 1, pos[1])
+    top_right = (pos[0] + 1, pos[1] + 1)
+    top = (pos[0], pos[1] + 1)
+    top_left = (pos[0] - 1, pos[1] + 1)
+    locs = (left, bot_left, bot, bot_right, right, top_right, top, top_left)
+
+    total = sum(spiral.get(position, 0) for position in locs)
+    return total
+
+
+value = 0
+spiral_2[(0,0)] = 1
+position = (0, 0)
+
+direction_getter = get_direction()
+move = next(direction_getter)
+position = (position[0] + move[0], position[1] + move[1])
+
+while True:
+    value = get_sum_adj_squares(position, spiral_2)
+    spiral_2[position] = value
+    indexes[i] = position
+    move = next(direction_getter)
+    position = (position[0] + move[0], position[1] + move[1])
+    if value > number:
+        break
+
+print(f'Part 2 answer: {value}')
