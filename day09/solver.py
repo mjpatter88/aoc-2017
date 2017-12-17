@@ -4,6 +4,7 @@ class ProcessingMachine():
         self.inside_garbage = False
         self.ignore_next = False
         self.line = []
+        self.garbage = []
         self.level = 0
         self.score = 0
 
@@ -12,8 +13,11 @@ class ProcessingMachine():
             self.ignore_next = False
             return
 
-        if self.inside_garbage and char == '!':
-            self.ignore_next = True
+        if self.inside_garbage:
+            if char == '!':
+                self.ignore_next = True
+            elif char != '>': # Don't count closing of garbage as garbage
+                self.garbage.append(char)
 
         if char == '<':
             self.inside_garbage = True
@@ -36,6 +40,7 @@ class ProcessingMachine():
 
 lines = []
 total_score = 0
+total_in_garbage = 0
 with open("input.txt") as input_file:
     for line in input_file.readlines():
         pm = ProcessingMachine()
@@ -45,10 +50,11 @@ with open("input.txt") as input_file:
             pm.step(c)
         print(pm.score)
         total_score += pm.score
+        total_in_garbage += len(pm.garbage)
         lines.append(pm.get_line())
 
 
 print(f'Part 1 answer: {total_score}')
-print(f'Part 2 answer: ')
+print(f'Part 2 answer: {total_in_garbage}')
 
 
