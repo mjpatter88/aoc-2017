@@ -1,6 +1,7 @@
 from collections import defaultdict
 registers = defaultdict(int)
 instructions = []
+highest_ever = 0
 
 class Instruction():
     def __init__(self, reg_a, instr, val_a, reg_b, comp, val_b):
@@ -34,8 +35,10 @@ with open("input.txt") as input_file:
 
 for instr in instructions:
     instr.evaluate(registers)
+    highest_ever = max(highest_ever, max(registers.values()))
 
 largest = max(registers.values())
 print(f'Part 1 answer: {largest}')
+print(f'Part 2 answer: {highest_ever}')
 
 
