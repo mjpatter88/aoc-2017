@@ -13,9 +13,9 @@ class CircularList:
 
     def __setitem__(self, given, value):
         if isinstance(given, slice):
-            start = given.start % len(self.data)
-            end = given.stop % len(self.data)
-            self.data[start:end] = value
+            for i in range(given.start, given.stop):
+                v = next(value)
+                self[i] = v
         else:
             self.data[given % len(self.data)] = value
 
@@ -23,27 +23,27 @@ class CircularList:
         return str(self.data)
 
     def reverse_portion(self, start, length):
-        self[start:length] = reversed(self[start:length])
+        end = start + length
+        self[start:end] = reversed(self[start:end])
 
 lines = []
 total_score = 0
 total_in_garbage = 0
 
 test_list = [0, 1, 2, 3, 4]
-cl = CircularList(test_list)
-with open("test_input.txt") as input_file:
+real_list = [x for x in range(256)]
+cl = CircularList(real_list)
+with open("input.txt") as input_file:
     line = input_file.readline()
     lengths = [int(l) for l in line.split(',')]
-    print(cl)
     for length in lengths:
         cl.reverse_portion(current_position, length)
         current_position += length
         current_position += skip_size
         skip_size += 1
-        print(cl)
 
 print(cl)
-print(f'Part 1 answer: ')
+print(f'Part 1 answer: {cl[0] * cl[1]}')
 print(f'Part 2 answer: ')
 
 
