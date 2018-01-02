@@ -30,8 +30,12 @@ with open("input.txt", "r") as input_file:
     line = input_file.readline()
     line = line.strip()
     instructions = line.split(',')
+
+NUM_RUNS = 1000000000
+for x in range(NUM_RUNS):
     for instr in instructions:
         programs = evaluate(instr, programs)
+    print(x)
 
 order = "".join(programs)
-print(f'Part 1 answer: {order}')
+print(f'Part 2 answer: {order}')
