@@ -1,3 +1,4 @@
+orig_programs = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p']
 programs = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p']
 
 def evaluate(instr, programs):
@@ -31,11 +32,25 @@ with open("input.txt", "r") as input_file:
     line = line.strip()
     instructions = line.split(',')
 
+# The key insight is to look for loops. The same instructions are run each time,
+# so if the programs are in the same order, you know the output will be the same.
+# Find the period of repetition and use that with the total number of runs to determine
+# the offset. Then just find the result of running that offset to get the answer.
 NUM_RUNS = 1000000000
 for x in range(NUM_RUNS):
+    run = x+1
     for instr in instructions:
         programs = evaluate(instr, programs)
-    print(x)
+    if programs == orig_programs:
+        print(f"Loop detected after {run} runs.")
+        break
+
+offset = NUM_RUNS % run
+print(f"Offset: {offset}")
+for x in range(offset):
+    run = x+1
+    for instr in instructions:
+        programs = evaluate(instr, programs)
 
 order = "".join(programs)
 print(f'Part 2 answer: {order}')
