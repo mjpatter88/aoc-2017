@@ -36,15 +36,13 @@ num_steps_per_turn = 377
 num_turns = 50000001
 answer = -1
 cursor = 0
-size = 1
 
 for x in range(1, num_turns):
     if x % 500000 == 0:
         print(x)
-    cursor = (cursor + num_steps_per_turn) % size + 1
+    cursor = (cursor + num_steps_per_turn) % x + 1
     if cursor == 1:
         answer = x
         print(x)
-    size += 1
 
 print(f'Part 2 answer: {answer}')
