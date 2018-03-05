@@ -32,17 +32,27 @@ print(f'Part 1 answer: {cb.buff[cb.cursor+1]}')
 # IDEA: rather than store an array at all for part two, lets just calc all the indexes and only store
 # the entries that would happen at index 0. The last value that would be entered at that index is the answer...
 
+# Enhancement: you can skip chunks at a time. One you calculate a cursor, you can figure out how many
+# spots are between you and the end of the list. You know how many steps each turn takes, so any jumps until you
+# would pass the end you can just skip. This saves lots of mods which are the expensive op.
+
+
 num_steps_per_turn = 377
 num_turns = 50000001
 answer = -1
 cursor = 0
 
-for x in range(1, num_turns):
+x = 1
+while x < num_turns:
+    size = x
     if x % 500000 == 0:
         print(x)
-    cursor = (cursor + num_steps_per_turn) % x + 1
+    cursor = (cursor + num_steps_per_turn) % size + 1
     if cursor == 1:
         answer = x
         print(x)
+    num_skips = int((size - cursor) / num_steps_per_turn)
+    x += num_skips + 1
+    cursor += num_skips * (num_steps_per_turn + 1)
 
 print(f'Part 2 answer: {answer}')
