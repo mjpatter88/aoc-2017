@@ -27,22 +27,24 @@ print(f'Part 1 answer: {cb.buff[cb.cursor+1]}')
 # Instead, let's create the whole array first, then the insert becomes fast.
 # This provides the right answer, but as I think through it, it shouldn't work. It's actually
 # replacing values rather than pushing them down. It only works since we are just looking for the
-# value after zero.
+# value after zero....
+
+# IDEA: rather than store an array at all for part two, lets just calc all the indexes and only store
+# the entries that would happen at index 0. The last value that would be entered at that index is the answer...
 
 num_steps_per_turn = 377
 num_turns = 50000001
-
-cb = CircularBuffer(num_steps_per_turn, num_turns)
+answer = -1
+cursor = 0
+size = 1
 
 for x in range(1, num_turns):
-    cb.insert(x)
     if x % 500000 == 0:
         print(x)
-
-answer = -1
-for ind, x in enumerate(cb.buff):
-    if x == 0:
-        answer = cb.buff[ind+1]
-        break
+    cursor = (cursor + num_steps_per_turn) % size + 1
+    if cursor == 1:
+        answer = x
+        print(x)
+    size += 1
 
 print(f'Part 2 answer: {answer}')
