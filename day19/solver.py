@@ -30,10 +30,12 @@ class Network:
         self.direction = "DOWN"
         self.visited = []
         self.location = self.find_starting_location()
+        self.steps = 0
 
     def step(self):
         self.move()
         self.update_direction()
+        self.steps += 1
 
     def find_starting_location(self):
         col = self.rows[0].index('|')
@@ -64,9 +66,6 @@ class Network:
 with open("input.txt") as inp:
     for line in inp:
         rows.append(line)
-# Append a final row
-# row_len = len(rows[0])
-# rows.append([' '] * row_len)
 
 network = Network(rows)
 while True:
@@ -76,4 +75,6 @@ while True:
         break
 
 print(f'Part 1 answer: {"".join(network.visited)}')
-
+print(f'Part 2 answer: {(network.steps)}')
+# This gives me the correct result for the test input but it is one too small for the real input.
+# I'm still not sure why...
