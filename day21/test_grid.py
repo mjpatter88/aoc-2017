@@ -1,30 +1,106 @@
 from solver import create_grid_from_pieces, divide_grid
 
 
-def test_grid_divides():
+def test_grid_divides_2x2():
     art = [
-        ['#', '.', '.', '#'],
-        ['.', '.', '.', '.'],
-        ['.', '.', '.', '.'],
-        ['#', '.', '.', '#']
-    ]
-    grid1 = [
         ['#', '.'],
         ['.', '.']
     ]
-    grid2 = [
-        ['.', '#'],
+    grid = [
+        ['#', '.'],
         ['.', '.']
     ]
+    assert divide_grid(art) == grid
+
+def test_grid_divides_3x3():
+    art = [
+        ['a', 'b', 'c'],
+        ['d', 'e', 'f'],
+        ['g', 'h', 'i']
+    ]
+    grid = [
+        ['a', 'b', 'c'],
+        ['d', 'e', 'f'],
+        ['g', 'h', 'i']
+    ]
+    assert divide_grid(art) == grid
+
+def test_grid_divides_4x4():
+    art = [
+        ['a', 'b', 'c', 'd'],
+        ['e', 'f', 'g', 'h'],
+        ['i', 'j', 'k', 'l'],
+        ['m', 'n', 'o', 'p']
+    ]
+    grid1 = [
+        ['a', 'b'],
+        ['e', 'f']
+    ]
+    grid2 = [
+        ['c', 'd'],
+        ['g', 'h']
+    ]
     grid3 = [
-        ['.', '.'],
+        ['i', 'j'],
+        ['m', 'n']
+    ]
+    grid4 = [
+        ['k', 'l'],
+        ['o', 'p']
+    ]
+    actual = divide_grid(art)
+    print(actual)
+    assert actual == [[grid1, grid2], [grid3, grid4]]
+
+def test_grid_divides_6x6():
+    art = [
+        ['#', '#', '.', '#', '#', '.'],
+        ['#', '.', '.', '#', '.', '.'],
+        ['.', '.', '.', '.', '.', '.'],
+        ['#', '#', '.', '#', '#', '.'],
+        ['#', '.', '.', '#', '.', '.'],
+        ['.', '.', '.', '.', '.', '.']
+    ]
+    grid1 = [
+        ['#', '#'],
         ['#', '.']
+    ]
+    grid2 = [
+        ['.', '#'],
+        ['.', '#']
+    ]
+    grid3 = [
+        ['#', '.'],
+        ['.', '.']
     ]
     grid4 = [
         ['.', '.'],
+        ['#', '#']
+    ]
+    grid5 = [
+        ['.', '.'],
         ['.', '#']
     ]
-    assert divide_grid(art) == [grid1, grid2, grid3, grid4]
+    grid6 = [
+        ['.', '.'],
+        ['#', '.']
+    ]
+    grid7 = [
+        ['#', '.'],
+        ['.', '.']
+    ]
+    grid8 = [
+        ['.', '#'],
+        ['.', '.']
+    ]
+    grid9 = [
+        ['.', '.'],
+        ['.', '.']
+    ]
+    assert divide_grid(art) == [[grid1, grid2, grid3],
+                                [grid4, grid5, grid6],
+                                [grid7, grid8, grid9]]
+
 
 def test_create_grid_from__3x3_pieces():
 #    ##.|##.

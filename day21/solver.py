@@ -37,15 +37,38 @@ class Rule:
         return grid in self.inputs
 
 
-
 def divide_grid(grid):
-        assert len(grid) % 2 == 0
-        div = int(len(grid)/2)
-        grid1 = [row[:div] for row in grid[:div]]
-        grid2 = [row[div:] for row in grid[:div]]
-        grid3 = [row[:div] for row in grid[div:]]
-        grid4 = [row[div:] for row in grid[div:]]
-        return [grid1, grid2, grid3, grid4]
+    length = len(grid)
+    assert length % 2 == 0 or length % 3 ==0
+    if length == 2 or length == 3:
+        return grid
+
+
+
+    if length % 2 == 0:
+        return divide_grid_by(grid, 2)
+    else:
+        return divide_grid_by(grid, 3)
+
+def divide_grid_by(grid, jump):
+    # 4x4 grid -> 4 divs
+    # 6x6 grid -> 9 divs
+    # (half one dimension) ^ 2 -> # grids
+    dim = len(grid)
+    grids = []
+
+    row_index = 0
+    while row_index < dim:
+        col_index = 0
+        grids_in_row = []
+        while col_index < dim:
+            new_grid = [row[col_index:col_index + jump] for row in grid[row_index:row_index + jump]]
+            grids_in_row.append(new_grid)
+            col_index += jump
+        grids.append(grids_in_row)
+        row_index += jump
+    return grids
+
 
 def create_grid_from_pieces(pieces):
     if len(pieces) == 1:
@@ -59,44 +82,55 @@ def create_grid_from_pieces(pieces):
         pieces[2][2] + pieces[3][2]
     ]
 
+class Solver:
+    def __init__(self):
+        self.master_grid = [
+            ['.', '#', '.'],
+            ['.', '.', '#'],
+            ['#', '#', '#']
+        ]
 
-if __name__ == '__main__':
-    master_grid = [
-        ['.', '#', '.'],
-        ['.', '.', '#'],
-        ['#', '#', '#']
-    ]
+        self.rules = []
+        with open("test_input.txt") as inp:
+            for line in inp:
+                self.rules.append(Rule(line))
 
-    rules = []
-    with open("test_input.txt") as inp:
-        for line in inp:
-            rules.append(Rule(line))
 
-    print("************** Starting ****************")
-    print(master_grid)
-    for i in range(NUM_ROUNDS):
-        if len(master_grid) % 2 == 0:
-            print("Divisable by 2, dividing...")
-            grids = divide_grid(master_grid)
+    def step(self):
+        if len(self.master_grid) % 2 == 0:
+            print("\tDivisable by 2, dividing...")
+            grids = divide_grid(self.master_grid)
+            print("\t", end="")
             print(grids)
         else:
-            grids = [master_grid]
+            grids = [self.master_grid]
         new_grids = []
         for grid in grids:
-            for rule in rules:
+            for rule in self.rules:
                 if rule.match(grid):
                     new_grids.append(rule.output)
                     break
-        master_grid = create_grid_from_pieces(new_grids)
-        print("MASTER")
-        print(master_grid)
+        self.master_grid = create_grid_from_pieces(new_grids)
+
+
+if __name__ == '__main__':
+    solver = Solver()
+
+    for i in range(NUM_ROUNDS):
+        print(f"Round {i}: Starting")
+        print(solver.master_grid)
+        solver.step()
+        print(f"Round {i}: Complete")
+        print(solver.master_grid)
+        print()
+
 # print(f'Part 1 answer: {min_index}')
 # print(f'Part 2 answer: {len(particles)}')
 
 # 1) Parse input into rules
 # 2) Generate all permutations of input for each rule
-
 # 3) Match grid state to rule
 # 4) Transform grid state
+
 # 5) Handle splitting of grid 
 #    (Always have one "master" grid but split off others that are references to part of it?)
